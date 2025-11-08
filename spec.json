@@ -1,0 +1,414 @@
+{
+  "DQ7pWi6zoJcKp8m5": {
+    "contentMarkdown": "**Timeline Observation** Show any observations recorded when advancing exam status, displayed in italics with quotes",
+    "categoryId": "17582046453732"
+  },
+  "HHZI6xZ2DEsEra12": {
+    "contentMarkdown": "**Timeline Date Format** Display date and time in Brazilian format: DD/MM/YYYY às HH:MM for each completed status",
+    "categoryId": "17582046453732"
+  },
+  "VEblKfUkVKgn0WsN": {
+    "contentMarkdown": "**Secretary Information Label** Bold text indicating information is specifically for the secretary",
+    "categoryId": "17582046453732"
+  },
+  "advance-after-save-dialog": {
+    "contentMarkdown": "**Medical Opinion Save Confirmation Dialog** Dialog that appears after saving medical opinion, asking if doctor wants to advance exam to 'Medical Opinion Issued' status",
+    "categoryId": "17582046453733"
+  },
+  "advance-dialog-cancel": {
+    "contentMarkdown": "**Keep Current Stage Button** Outline button to keep exam in current stage after saving opinion",
+    "categoryId": "17582046453733"
+  },
+  "advance-dialog-confirm": {
+    "contentMarkdown": "**Advance Stage Confirmation Button** Blue button to confirm advancing exam to 'Medical Opinion Issued' status",
+    "categoryId": "17582046453733"
+  },
+  "advance-dialog-description": {
+    "contentMarkdown": "**Save Confirmation Description** Explains that medical opinion was saved and asks if user wants to advance exam stage",
+    "categoryId": "17582046453732"
+  },
+  "advance-dialog-title": {
+    "contentMarkdown": "**Save Confirmation Title** Dialog title showing 'Parecer Médico Salvo' when medical opinion is saved",
+    "categoryId": "17582046453732"
+  },
+  "advance-status-button": {
+    "contentMarkdown": "**Click Event** When clicked, opens dialog with optional observation field and confirmation to advance exam to next status with audit logging",
+    "categoryId": "17582046453731"
+  },
+  "audit-log-justification": {
+    "contentMarkdown": "**Audit Log Justification** Shows the justification text provided when actions required explanation",
+    "categoryId": "17582046453732"
+  },
+  "audit-log-user": {
+    "contentMarkdown": "**Audit Log User Name** Displays the actual user name who performed each action instead of just showing 'Sistema'",
+    "categoryId": "17582046453732"
+  },
+  "awaiting-opinion-card": {
+    "contentMarkdown": "**Awaiting Medical Opinion Panel**\n- Panel Header\n    - Stethoscope Icon\n    - Title Text\n    - Exam Count Badge\n- Panel Description\n- Exam List (when available)\n    - Patient Information\n    - Exam Details (vial, lab)\n    - Date Information (collection, release)\n    - Status Badge (days waiting)\n    - Evaluate Button\n- Empty State (when no exams)\n    - Empty Icon\n    - Empty Message\n    - Help Text",
+    "categoryId": "17582046453732"
+  },
+  "awaiting-opinion-urgent-icon": {
+    "contentMarkdown": "Red warning triangle icon displayed when exam has been waiting for medical opinion for 3 or more days, indicating urgent attention needed",
+    "categoryId": "17582046453730"
+  },
+  "awaiting-opinion-view-button": {
+    "contentMarkdown": "**Click Event**\nNavigate to exam details page for medical opinion evaluation",
+    "categoryId": "17582046453731"
+  },
+  "back-button": {
+    "contentMarkdown": "When clicked, navigates back to the previous page (dashboard or history)",
+    "categoryId": "Interaction"
+  },
+  "biopsia-checkbox": {
+    "contentMarkdown": "**Biopsy Exam Checkbox** Checkbox for requesting anatomopathological (biopsy) examination in exam registration form with proper validation and state management",
+    "categoryId": "17582046453733"
+  },
+  "biopsia-interpretation-select": {
+    "contentMarkdown": "**Biopsy Interpretation Select** Medical opinion field for biopsy results with three options: Normal, Altered, or Not Performed, automatically disabled if biopsy was not requested",
+    "categoryId": "17582046453733"
+  },
+  "biopsy-performed-badge": {
+    "contentMarkdown": "Orange badge showing 'Biópsia Realizada' for secretaries instead of biopsy interpretation results",
+    "categoryId": "17582046453730"
+  },
+  "change-password-container": {
+    "contentMarkdown": "**Change Password Page**\n- Header with key icon and title\n- Password change form card\n    - Current password field with show/hide toggle\n    - New password field with show/hide toggle\n    - Confirm password field with show/hide toggle\n    - Submit button\n    - Password requirements list",
+    "categoryId": "17582046453732"
+  },
+  "change-password-form": {
+    "contentMarkdown": "**Password Change Form**\n- Current Password: Required, password input with visibility toggle\n- New Password: Required, minimum 4 characters, password input with visibility toggle\n- Confirm Password: Required, must match new password, password input with visibility toggle\n- Submit Button: Disabled until all fields are filled",
+    "categoryId": "17582046453733"
+  },
+  "change-password-submit": {
+    "contentMarkdown": "**Form Submission**\nValidates current password, checks new password meets requirements, confirms passwords match, then updates user password in database and shows success message",
+    "categoryId": "17582046453731"
+  },
+  "citologia-interpretation": {
+    "contentMarkdown": "**Cytology Interpretation Logic** Select field for cytology results that automatically disables when cytology was not performed, preventing incorrect result entry for non-performed exams",
+    "categoryId": "17582046453731"
+  },
+  "citologia-performed-badge": {
+    "contentMarkdown": "Blue badge showing 'Citologia Realizada' for secretaries instead of medical interpretation results",
+    "categoryId": "17582046453730"
+  },
+  "clear-filters": {
+    "contentMarkdown": "When clicked, clears all applied filters and resets search to show all exams",
+    "categoryId": "Interaction"
+  },
+  "consultation-date-info": {
+    "contentMarkdown": "**Consultation Date Information** Shows calculated consultation date for secretary based on return type: immediate (red), or approximate date (blue)",
+    "categoryId": "17582046453732"
+  },
+  "create-lab-button": {
+    "contentMarkdown": "**Click Event** Opens dialog to create new laboratory with form fields for name, contact person, phone, results link and SLA days",
+    "categoryId": "17582046453731"
+  },
+  "create-patient-button": {
+    "contentMarkdown": "**Click Event** Opens dialog to create new patient with form fields for full name, birth date and phone number",
+    "categoryId": "17582046453731"
+  },
+  "dashboard-container": {
+    "contentMarkdown": "Main dashboard with status cards showing exam counts by status, filters section, and exams list",
+    "categoryId": "Content"
+  },
+  "dna-hpv-performed-badge": {
+    "contentMarkdown": "Purple badge showing 'DNA HPV Realizado' for secretaries instead of positive/negative results",
+    "categoryId": "17582046453730"
+  },
+  "dna-hpv-result": {
+    "contentMarkdown": "**DNA HPV Result Logic** Select field for HPV DNA results that automatically disables when HPV test was not requested, ensuring proper 'Not Performed' status for unrequested tests",
+    "categoryId": "17582046453731"
+  },
+  "edit-justificativa-input": {
+    "contentMarkdown": "**Edit Justification Input** Required textarea for entering justification when editing issued medical opinion",
+    "categoryId": "17582046453733"
+  },
+  "edit-parecer-button": {
+    "contentMarkdown": "**Edit Medical Opinion Button** Button to open justification dialog for editing already issued medical opinion",
+    "categoryId": "17582046453733"
+  },
+  "edit-parecer-dialog": {
+    "contentMarkdown": "**Edit Medical Opinion Dialog** Large modal for editing issued medical opinion with mandatory justification field and all opinion fields",
+    "categoryId": "17582046453733"
+  },
+  "edit-parecer-dialog-save": {
+    "contentMarkdown": "**Save Opinion Changes Button** Green button to save medical opinion changes with justification - disabled if no justification provided",
+    "categoryId": "17582046453733"
+  },
+  "edit-return-imediato": {
+    "contentMarkdown": "**Immediate Return Option** Select option for immediate patient return without warning emoji",
+    "categoryId": "17582046453732"
+  },
+  "email-input": {
+    "contentMarkdown": "**Login Form Email Input**\n- Email Address: Required\n  - Required\n  - Validation: Email format\n  - Placeholder: seu.email@casalmonken.com.br",
+    "categoryId": "17582046453733"
+  },
+  "exam-details-container": {
+    "contentMarkdown": "**Exam Details Page**\n- Header with back button and exam title\n- Current status badge\n- Exam information card with patient, doctor, lab details\n- Timeline showing progression through all 7 status stages\n- Medical opinion form (for doctors only)\n- Patient communication form\n- Action buttons to advance status",
+    "categoryId": "Content"
+  },
+  "exam-registration-container": {
+    "contentMarkdown": "**Exam Registration Page** Main container for new exam registration with header section and form card for medical professionals to register cytological exams",
+    "categoryId": "17582046453732"
+  },
+  "exam-registration-form-card": {
+    "contentMarkdown": "**Exam Registration Form** Complete form for registering new cytological exams with patient selection, lab selection, collection data, and requested exams validation",
+    "categoryId": "17582046453733"
+  },
+  "filter-active-indicator": {
+    "contentMarkdown": "**Dashboard Status Filter Indicator** Shows 'Filtro ativo' text when a status card is selected as active filter",
+    "categoryId": "17582046453732"
+  },
+  "header-logo": {
+    "contentMarkdown": "Compact clinic logo in header navigation for brand consistency across all pages\n\n- Theme color: Gold/beige branding with clean background\n- Font: Clean sans-serif for navigation elements\n- Border radius style: Subtle rounded edges",
+    "categoryId": "17582046453730"
+  },
+  "header-titles": {
+    "contentMarkdown": "**Header Title Section**\n- Application Title\n    - \"Citologia Oncótica\"\n- System Description\n    - \"Sistema de Gestão de Exames\"",
+    "categoryId": "17582046453732"
+  },
+  "history-audit-logs": {
+    "contentMarkdown": "**Complete Audit History Section** Shows complete audit logs for finalized exams including user responsible, timestamp, actions, and justifications",
+    "categoryId": "17582046453732"
+  },
+  "history-container": {
+    "contentMarkdown": "**Exam History Page**\n- Header with history title and refresh button\n- Statistics cards showing total exams, normal results, altered results, HPV positive\n- Filters for search, doctor, and time period\n- List of completed exams with detailed results\n- View details button for each exam",
+    "categoryId": "Content"
+  },
+  "history-search-input": {
+    "contentMarkdown": "When typing, filters exam history by patient name, phone number, or vial number in real-time",
+    "categoryId": "Interaction"
+  },
+  "history-stats": {
+    "contentMarkdown": "Four statistics cards displaying: Total exams count, Normal results count (green), Altered results count (orange), HPV positive count (red)",
+    "categoryId": "Content"
+  },
+  "lab-form": {
+    "contentMarkdown": "**Laboratory Form** - Laboratory Name: Required text input - Contact Person: Optional text input - Contact Phone: Optional text input - Results Link: Optional URL input - SLA Days: Optional number input",
+    "categoryId": "17582046453733"
+  },
+  "layout-header": {
+    "contentMarkdown": "App header with title 'Citologia Oncótica', clinic name, user info and logout button",
+    "categoryId": "Content"
+  },
+  "login-button": {
+    "contentMarkdown": "When clicked, submits login form and authenticates user with provided credentials",
+    "categoryId": "Interaction"
+  },
+  "login-card": {
+    "contentMarkdown": "White login card with shadow, maximum width 384px, responsive design",
+    "categoryId": "Design"
+  },
+  "login-container": {
+    "contentMarkdown": "Full screen login container with gradient background from blue-50 to indigo-100, centered content layout",
+    "categoryId": "Design"
+  },
+  "login-form": {
+    "contentMarkdown": "**Login Form**\n- Email Address: Single line input\n  - Required\n  - Validation: Email format\n  - Placeholder: seu.email@casalmonken.com.br\n- Password: Password input\n  - Required\n  - Validation: Match stored password\n  - Placeholder: Sua senha\n- Login Button\n  - Disabled during loading\n  - Shows spinner when processing",
+    "categoryId": "17582046453733"
+  },
+  "login-logo": {
+    "contentMarkdown": "Clean and professional clinic logo display with appropriate sizing for login screen branding\n\n- Theme color: Gold/beige tones matching clinic branding\n- Font: Professional, readable typography\n- Border radius style: Rounded corners for modern appearance",
+    "categoryId": "17582046453730"
+  },
+  "login-logo-container": {
+    "contentMarkdown": "**Login Logo Container**\n- Centered Logo Display\n- Proper spacing and alignment",
+    "categoryId": "17582046453732"
+  },
+  "logout-button": {
+    "contentMarkdown": "When clicked, logs out current user and redirects to login screen",
+    "categoryId": "Interaction"
+  },
+  "main-layout": {
+    "contentMarkdown": "**Login State Change**\nWhen user successfully logs in:\n1. Automatically redirects to dashboard page\n2. Clears any selected exam details\n3. Resets navigation state to default\n4. Prevents returning to previous session page",
+    "categoryId": "17582046453731"
+  },
+  "medical-opinion-card": {
+    "contentMarkdown": "**Medical Opinion Form**\n- Citology interpretation dropdown\n- DNA HPV result selection\n- Medical observations textarea\n- Next consultation date picker\n- Return type selection\n- Only visible to authorized doctors",
+    "categoryId": "Content"
+  },
+  "medico-filter": {
+    "contentMarkdown": "Dropdown to filter exams by specific doctor - shows only doctors in the system",
+    "categoryId": "Interaction"
+  },
+  "nav-change-password": {
+    "contentMarkdown": "**Navigation Click**\nWhen clicked, navigates to password change page where users can update their login credentials",
+    "categoryId": "17582046453731"
+  },
+  "nav-history": {
+    "contentMarkdown": "When clicked, navigates to exam history page showing all completed exams",
+    "categoryId": "Interaction"
+  },
+  "new-patient-dialog": {
+    "contentMarkdown": "**New Patient Registration Form** Modal dialog form for registering new patients with name, birth date, and optional phone number fields including validation",
+    "categoryId": "17582046453733"
+  },
+  "next-consultation-content": {
+    "contentMarkdown": "Blue-themed information card displaying next consultation date with calendar icon, automatic calculation explanation, and secretary-specific reminder note",
+    "categoryId": "17582046453730"
+  },
+  "next-consultation-info": {
+    "contentMarkdown": "**Next Consultation Section**\n- Next Consultation Label\n- Consultation Content Card\n    - Consultation Date\n    - Consultation Type (6 months/1 year/2 years)\n    - Automatic Calculation Note\n    - Secretary Reminder (for secretaries only)",
+    "categoryId": "17582046453732"
+  },
+  "observacao-etapa-field": {
+    "contentMarkdown": "**Observation Field** - Optional text area for step observations - No validation required - Saves to audit logs when advancing status",
+    "categoryId": "17582046453733"
+  },
+  "parecer-actions": {
+    "contentMarkdown": "**Medical Opinion Actions Section** Container for action buttons in the medical opinion form, right-aligned",
+    "categoryId": "17582046453732"
+  },
+  "parecer-biopsia": {
+    "contentMarkdown": "**Biopsy Medical Opinion Display** Shows biopsy examination results in finalized medical opinions with clear indication when biopsy was not performed",
+    "categoryId": "17582046453732"
+  },
+  "parecer-edit-alert": {
+    "contentMarkdown": "**Opinion Edit Alert Section** Orange warning box showing all edits made to medical opinion with timestamps and justifications",
+    "categoryId": "17582046453730"
+  },
+  "parecer-edited-badge": {
+    "contentMarkdown": "**Opinion Edited Badge** Orange badge with pencil emoji indicating when medical opinion has been edited after initial emission",
+    "categoryId": "17582046453730"
+  },
+  "parecer-emitido-view-card": {
+    "contentMarkdown": "**Issued Medical Opinion View Card** Read-only display of medical opinion when status is 'Medical Opinion Issued' with edit button",
+    "categoryId": "17582046453732"
+  },
+  "parecer-exams-performed": {
+    "contentMarkdown": "**Exams Performed Section (Secretaries View)**\n- Section Title\n- Exam Type Badges\n    - Citologia Realizada Badge\n    - DNA HPV Realizado Badge\n    - Biópsia Realizada Badge",
+    "categoryId": "17582046453732"
+  },
+  "parecer-medical-view-card": {
+    "contentMarkdown": "**Medical Opinion Card** Displays complete medical opinion details for both active and finalized exams, including cytology interpretation, DNA HPV results, return period, communication method, and medical observations",
+    "categoryId": "17582046453732"
+  },
+  "parecer-status-info": {
+    "contentMarkdown": "**Medical Opinion Status Section (Secretaries View)**\n- Section Title\n- Status Badge\n    - Medical Opinion Issued Badge",
+    "categoryId": "17582046453732"
+  },
+  "patient-form": {
+    "contentMarkdown": "**Patient Form** - Full Name: Required text input - Birth Date: Required date input - Phone: Optional text input",
+    "categoryId": "17582046453733"
+  },
+  "patient-selection-section": {
+    "contentMarkdown": "**Patient Selection Section** Patient selection area with search functionality, dropdown selection, and new patient registration button for easy patient management",
+    "categoryId": "17582046453732"
+  },
+  "requested-exams-section": {
+    "contentMarkdown": "**Requested Exams Section** Checkbox section for selecting exam types (Citologia Oncótica and DNA HPV) with validation requiring at least one selection",
+    "categoryId": "17582046453732"
+  },
+  "return-schedule-card": {
+    "contentMarkdown": "**Return Schedule Section** (Visible to Secretaries only)\n- Header with calendar icon and count badge\n- Description about communication needs\n- List of exams with return dates\n    - Patient name with urgent indicator\n    - Exam details (vial number, doctor)\n    - Collection and return dates\n    - Return type badge\n    - View button",
+    "categoryId": "17582046453732"
+  },
+  "save-parecer-button": {
+    "contentMarkdown": "**Save Medical Opinion Button** Button to save medical opinion without advancing exam status - triggers saveParecer function",
+    "categoryId": "17582046453733"
+  },
+  "search-input": {
+    "contentMarkdown": "When typing, filters exam list by patient name or phone number in real-time",
+    "categoryId": "Interaction"
+  },
+  "secretary-action-reminder": {
+    "contentMarkdown": "**Orange Reminder Box**\nShow secretary action checklist:\n- Communicate date to patient\n- Inform commercial sector for scheduling\n- Make follow-up calls before the date",
+    "categoryId": "17582046453731"
+  },
+  "secretary-consultation-period-badge": {
+    "contentMarkdown": "Blue badge showing the return period (6 months, 1 year, 2 years) defined by the doctor",
+    "categoryId": "17582046453730"
+  },
+  "secretary-consultation-schedule-card": {
+    "contentMarkdown": "**Secretary Consultation Schedule Card**\n- Card Title\n    - Calendar Icon\n    - \"Próxima Consulta - Agenda da Secretária\" Title\n- Card Content\n    - Consultation Date Info Section\n        - Calendar Icon\n        - Next Consultation Date\n        - Period Badge (6 months/1 year/2 years)\n    - Consultation Details Section\n        - Patient Name\n        - Collection Date\n        - Medical Recommendation Period\n    - Action Reminder Section\n        - Reminder Icon\n        - \"Ações Necessárias\" Title\n        - Action List\n            - Communicate date to patient\n            - Inform commercial sector\n            - Follow-up before date",
+    "categoryId": "17582046453732"
+  },
+  "secretary-consultation-title": {
+    "contentMarkdown": "Title for secretary consultation schedule showing 'Próxima Consulta - Agenda da Secretária' with calendar icon",
+    "categoryId": "17582046453730"
+  },
+  "secretary-next-consultation-date": {
+    "contentMarkdown": "Display the calculated next consultation date in large, prominent blue text for secretary reference",
+    "categoryId": "17582046453730"
+  },
+  "secretary-reminder": {
+    "contentMarkdown": "**Click Event**\nDisplay reminder note for secretaries to communicate the next consultation date to both patient and commercial team",
+    "categoryId": "17582046453731"
+  },
+  "siPKBB64fOxDDA2L": {
+    "contentMarkdown": "**Line Break Element** Simple line break for formatting in consultation date information",
+    "categoryId": "17582046453732"
+  },
+  "sidebar": {
+    "contentMarkdown": "Navigation sidebar with menu items: Dashboard, Pacientes, Novo Exame, Relatórios, Configurações (filtered by user permissions)",
+    "categoryId": "Content"
+  },
+  "sidebar-branding": {
+    "contentMarkdown": "**Sidebar Branding Section**\n- Clinic Logo\n- Clinic Name\n    - \"Espaço Casal Monken\"\n- Specialty Description\n    - \"Ginecologia e Obstetrícia\"",
+    "categoryId": "17582046453732"
+  },
+  "sidebar-logo": {
+    "contentMarkdown": "Prominent clinic logo in sidebar with clinic information display\n\n- Theme color: Elegant gold/beige with medical aesthetic\n- Font: Professional typography for medical institution branding\n- Border radius style: Modern rounded appearance",
+    "categoryId": "17582046453730"
+  },
+  "sidebar-logout-button": {
+    "contentMarkdown": "**Click Event**\nWhen clicked, triggers immediate logout process:\n1. Clears user session data\n2. Removes stored credentials\n3. Shows success toast notification\n4. Redirects to login screen",
+    "categoryId": "17582046453731"
+  },
+  "sidebar-nav": {
+    "contentMarkdown": "**Sidebar Navigation**\n- Dashboard\n- Pacientes\n- Novo Exame\n- Histórico\n- Laboratórios (Secretary/Admin only)\n- Relatórios (Admin only)\n- Configurações (Admin only)\n- Alterar Senha\n    - Separator Line\n    - Sair Button",
+    "categoryId": "17582046453732"
+  },
+  "sla-monitoring-card": {
+    "contentMarkdown": "**SLA Monitoring Panel**\n- Panel Header\n    - Flask Icon\n    - Title Text\n    - Exam Count Badge\n- Panel Description\n- Exam List (when violations exist)\n    - Patient Information\n    - Exam Details (vial, lab)\n    - Date Information (collected by lab)\n    - SLA Information (days limit)\n    - Days Over SLA Badge\n    - Contact Lab Button\n    - View Exam Button\n- Empty State (when no violations)\n    - Empty Icon\n    - Success Message\n    - Help Text",
+    "categoryId": "17582046453732"
+  },
+  "sla-monitoring-contact-button": {
+    "contentMarkdown": "**Click Event**\nOpen WhatsApp with pre-filled message to laboratory contact requesting information about exam delay and expected release date",
+    "categoryId": "17582046453731"
+  },
+  "sla-monitoring-urgent-icon": {
+    "contentMarkdown": "Red warning triangle icon displayed for all exams that have exceeded laboratory SLA, indicating urgent attention needed from secretary to contact lab",
+    "categoryId": "17582046453730"
+  },
+  "status-cards": {
+    "contentMarkdown": "Grid of cards showing count of exams for each status: Amostra Coletada, Recolhido pelo Laboratório, etc.",
+    "categoryId": "Content"
+  },
+  "status-filter": {
+    "contentMarkdown": "Dropdown to filter exams by status - shows all possible exam statuses",
+    "categoryId": "Interaction"
+  },
+  "status-timeline-card": {
+    "contentMarkdown": "**Status Timeline Card** Shows complete chronology of exam with expandable audit log details for each step, user information, timestamps, actions and justifications",
+    "categoryId": "17582046453732"
+  },
+  "timeline-audit-log": {
+    "contentMarkdown": "**Timeline Audit Log** Individual audit log entry within timeline showing user name, timestamp, action description, and optional observation/justification",
+    "categoryId": "17582046453732"
+  },
+  "timeline-steps": {
+    "contentMarkdown": "**Exam Timeline Steps** Displays exam progress with 6 stages including conditional stage 6 for non-immediate consultations, showing detailed audit logs for each completed step with user responsibility and observations",
+    "categoryId": "17582046453732"
+  },
+  "vX6kimxLo4fluYcv": {
+    "contentMarkdown": "**Timeline Responsible User** Display the name of the user responsible for each status change in the exam timeline",
+    "categoryId": "17582046453732"
+  },
+  "view-exam-button": {
+    "contentMarkdown": "When clicked, navigates to detailed view of the selected exam",
+    "categoryId": "Interaction"
+  },
+  "whatsapp-message-preview": {
+    "contentMarkdown": "**WhatsApp Message Preview** Shows formatted preview of message to be sent including patient name, secretary name, and doctor name without emoji characters",
+    "categoryId": "17582046453732"
+  },
+  "whatsapp-section": {
+    "contentMarkdown": "**WhatsApp Communication Section** Appears when WhatsApp is selected as contact method, showing message preview and send button",
+    "categoryId": "17582046453733"
+  },
+  "whatsapp-send-button": {
+    "contentMarkdown": "**Send WhatsApp Button** Green button that opens WhatsApp with pre-filled message for patient communication",
+    "categoryId": "17582046453733"
+  }
+}
