@@ -104,9 +104,9 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
     };
     return (<div className="min-h-screen" data-spec-id="layout-container">
       {}
-      <header className="bg-white shadow-sm border-b" data-spec-id="layout-header">
-        {}
-        <div className="hidden md:block px-4 sm:px-6 lg:px-8" data-spec-id="desktop-header">
+      {}
+      <header className="hidden md:block bg-white shadow-sm border-b" data-spec-id="desktop-header">
+        <div className="px-4 sm:px-6 lg:px-8" data-spec-id="desktop-header-container">
           <div className="flex justify-between items-center h-16" data-spec-id="desktop-header-content">
             <div className="flex items-center space-x-4" data-spec-id="header-left">
               <img src="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" alt="Espaço Casal Monken Logo" className="h-8 w-auto object-contain" data-spec-id="header-logo"/>
@@ -136,9 +136,11 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
             </div>
           </div>
         </div>
+      </header>
 
-        {}
-        <div className="md:hidden px-3 py-2" data-spec-id="mobile-header">
+      {}
+      <header className="md:hidden bg-white shadow-sm border-b" data-spec-id="mobile-header">
+        <div className="px-3 py-2" data-spec-id="mobile-header-container">
           <div className="flex items-center justify-between" data-spec-id="mobile-header-content">
             <div className="flex items-center space-x-2" data-spec-id="mobile-header-left">
               <img src="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" alt="Logo" className="h-6 w-auto object-contain" data-spec-id="mobile-header-logo"/>
@@ -150,12 +152,12 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
             </div>
             
             <div className="flex items-center space-x-2" data-spec-id="mobile-header-right">
-              <div className="flex flex-col items-end" data-spec-id="mobile-user-info">
-                <span className="text-xs font-medium text-gray-800" data-spec-id="mobile-user-name">
+              <div className="text-right" data-spec-id="mobile-user-info">
+                <div className="text-xs text-gray-700 font-medium" data-spec-id="mobile-user-name">
                   {user?.nome?.split(' ')[0]} {}
-                </span>
-                <Badge className={`text-xs px-1 py-0 ${getProfileColor(user?.perfil || '')}`} data-spec-id="mobile-user-badge">
-                  {user?.perfil === 'Superusuario' ? 'Super' : user?.perfil === 'Administrador' ? 'Admin' : user?.perfil === 'Secretaria' ? 'Secret' : 'Médico'}
+                </div>
+                <Badge className={`text-xs ${getProfileColor(user?.perfil || '')}`} data-spec-id="mobile-user-badge">
+                  {user?.perfil}
                 </Badge>
               </div>
               <Button variant="ghost" size="sm" onClick={handleLogout} data-spec-id="mobile-logout-button" className="p-1">
@@ -168,24 +170,23 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
 
       <div className="flex flex-col md:flex-row" data-spec-id="layout-content">
         {}
-        <aside className="md:hidden bg-white border-b" data-spec-id="mobile-sidebar">
-          <div className="p-2" data-spec-id="WucJUmd5RCenlKKA">
-            <div className="flex items-center justify-center mb-2" data-spec-id="az0zejt1npumm1c1">
-              <img src="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" alt="Logo" className="h-6 w-auto object-contain" data-spec-id="mobile-logo"/>
-              <span className="ml-2 text-sm font-semibold" data-spec-id="VS07NWbCgDrwsjpP">Citologia</span>
-            </div>
-            <nav className="grid grid-cols-4 gap-1" data-spec-id="mobile-nav">
+        {}
+        <nav className="md:hidden bg-white border-b" data-spec-id="mobile-nav-container">
+          <div className="px-2 py-3" data-spec-id="mobile-nav-wrapper">
+            <div className="grid grid-cols-4 gap-2" data-spec-id="mobile-nav">
               {navigationItems.filter((item)=>canAccess(item.permission) && item.key !== 'change-password').slice(0, 4).map((item)=>{
         const Icon = item.icon;
         const isActive = currentPage === item.key;
-        return (<Button key={item.key} variant={isActive ? "default" : "ghost"} size="sm" className={`flex flex-col h-16 ${isActive ? 'bg-blue-600 text-white' : 'text-gray-700'}`} onClick={()=>handleNavigation(item.key)} data-spec-id={`mobile-nav-${item.key}`}>
-                    <Icon className="w-4 h-4" data-spec-id="tOK1Ss6Tqsrfbc7c"/>
-                    <span className="text-xs mt-1" data-spec-id="hzHtxxBQNoYEvwgB">{item.label}</span>
+        return (<Button key={item.key} variant={isActive ? "default" : "ghost"} size="sm" className={`flex flex-col h-14 p-2 ${isActive ? 'bg-blue-600 text-white' : 'text-gray-700'}`} onClick={()=>handleNavigation(item.key)} data-spec-id={`mobile-nav-${item.key}`}>
+                    <Icon className="w-4 h-4" data-spec-id="mobile-nav-icon"/>
+                    <span className="text-xs mt-1 leading-tight" data-spec-id="mobile-nav-label">
+                      {item.label}
+                    </span>
                   </Button>);
     })}
-            </nav>
+            </div>
           </div>
-        </aside>
+        </nav>
 
         {}
         <aside className="hidden md:block w-64 bg-white shadow-sm min-h-screen" data-spec-id="desktop-sidebar">

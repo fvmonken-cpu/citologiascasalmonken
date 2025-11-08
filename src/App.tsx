@@ -3,6 +3,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import InstallPrompt from "@/components/InstallPrompt";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import "./App.css";
@@ -21,6 +22,9 @@ const App = ()=>(<QueryClientProvider client={queryClient} data-spec-id="pBzaC8I
             <Route path="*" element={<NotFound data-spec-id="VNvcO19HuDp2h6wo"/>} data-spec-id="A5Aa8LYUNRZO1BdJ"/>
           </Routes>
         </BrowserRouter>
+        
+        {}
+        <InstallPrompt data-spec-id="pwa-install-prompt"/>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>);

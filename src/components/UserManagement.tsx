@@ -175,7 +175,8 @@ const UserManagement = ()=>{
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen} data-spec-id="GsYFhgWsnOEqlg74">
           <DialogTrigger asChild data-spec-id="syD9vVE5AdK2cYlp">
-            <Button onClick={()=>{
+            <Button onClick={(e)=>{
+        e.preventDefault();
         resetForm();
         setDialogOpen(true);
     }} className="bg-blue-600 hover:bg-blue-700" data-spec-id="add-user-button">
@@ -234,18 +235,21 @@ const UserManagement = ()=>{
                 </Select>
               </div>
 
-              <div className="flex items-center space-x-2" data-spec-id="XD9UHgcTMG3LpkA0">
-                <Switch id="ativo" checked={formData.ativo} onCheckedChange={(checked)=>setFormData({
+              {}
+              {(!editingUser || editingUser.id !== currentUser?.id) && (<div className="flex items-center space-x-2" data-spec-id="XD9UHgcTMG3LpkA0">
+                  <Switch id="ativo" checked={formData.ativo} onCheckedChange={(checked)=>setFormData({
             ...formData,
             ativo: checked
-        })} disabled={editingUser?.id === currentUser?.id} data-spec-id="active-switch"/>
-                <Label htmlFor="ativo" data-spec-id="XYzqecr2WHRfPshH">
-                  Usuário ativo
-                  {editingUser?.id === currentUser?.id && (<span className="text-xs text-gray-500 block" data-spec-id="OfBLhVWTVrLDYUTE">
-                      (Você não pode desativar sua própria conta)
-                    </span>)}
-                </Label>
-              </div>
+        })} data-spec-id="active-switch"/>
+                  <Label htmlFor="ativo" data-spec-id="XYzqecr2WHRfPshH">Usuário ativo</Label>
+                </div>)}
+
+              {}
+              {editingUser && editingUser.id === currentUser?.id && (<div className="p-3 bg-amber-50 border border-amber-200 rounded-md" data-spec-id="self-edit-warning">
+                  <p className="text-sm text-amber-800" data-spec-id="glODUQfzqAYdbCHk">
+                    ⚠️ Você está editando seu próprio perfil. Por segurança, não é possível alterar o status de ativação.
+                  </p>
+                </div>)}
 
               <div className="flex gap-2 pt-4" data-spec-id="y50OOgbj1o0AQkSr">
                 <Button type="submit" className="flex-1" data-spec-id="save-button">
