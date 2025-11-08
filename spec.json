@@ -11,12 +11,8 @@
     "contentMarkdown": "**Secretary Information Label** Bold text indicating information is specifically for the secretary",
     "categoryId": "17582046453732"
   },
-  "active-switch": {
-    "contentMarkdown": "**Status Toggle Interaction**\n\nSmart switch behavior with auto-protection:\n1. Shows current user active status\n2. Allows toggling for other users\n3. **Auto-disables when editing own account** - prevents self-deactivation\n4. Shows explanatory message when disabled\n5. Maintains visual consistency across all states",
-    "categoryId": "17582046453731"
-  },
   "add-user-button": {
-    "contentMarkdown": "**Click Event**\n\nReliable user creation trigger:\n1. Resets form to clean state (clears all fields)\n2. Forces dialog to open state\n3. Sets dialog title to 'Novo Usuário'\n4. Ensures consistent behavior across devices\n5. Opens modal dialog for user input",
+    "contentMarkdown": "**Click Event**\nWhen clicked:\n1. Prevents default dialog trigger behavior\n2. Resets form to empty state (resetForm())\n3. Opens user creation dialog (setDialogOpen(true))\n4. Sets dialog title to 'Novo Usuário'\n5. Allows creating new user account",
     "categoryId": "17582046453731"
   },
   "advance-after-save-dialog": {
@@ -119,6 +115,10 @@
     "contentMarkdown": "Main dashboard with status cards showing exam counts by status, filters section, and exams list",
     "categoryId": "Content"
   },
+  "desktop-header": {
+    "contentMarkdown": "Desktop header with full branding:\n\n- Theme color: Professional white with subtle gray accents  \n- Font: System font stack with proper hierarchy\n- Border radius style: Clean lines with subtle shadow\n\nFull-featured header displaying complete clinic branding, app title, subtitle, full user name, profile badge and logout button",
+    "categoryId": "17582046453730"
+  },
   "desktop-sidebar": {
     "contentMarkdown": "Desktop sidebar with comprehensive navigation:\n\n- Theme color: Blue (#2563eb) for active states, subtle grays for inactive\n- Font: System font stack with proper hierarchy\n- Border radius style: Rounded corners (md) for interactive elements\n\nFixed width sidebar (256px) with microscope icon, clinic branding, and full navigation menu",
     "categoryId": "17582046453730"
@@ -195,6 +195,14 @@
     "contentMarkdown": "Four statistics cards displaying: Total exams count, Normal results count (green), Altered results count (orange), HPV positive count (red)",
     "categoryId": "Content"
   },
+  "install-button": {
+    "contentMarkdown": "**Click Event**\n\nWhen clicked:\n1. Calls the native browser install prompt API\n2. Waits for user choice (accepted/dismissed)\n3. Logs the installation outcome\n4. Hides the prompt if accepted\n5. Clears the install event reference\n6. Handles any installation errors gracefully",
+    "categoryId": "17582046453731"
+  },
+  "install-prompt-container": {
+    "contentMarkdown": "PWA Installation Prompt Design:\n\n- Theme color: Blue gradient background (#3b82f6) with white content area\n- Font: System font stack with clear hierarchy (semibold titles, regular text)\n- Border radius style: Rounded corners (md) for modern card appearance\n\nFloating card positioned at bottom-right on desktop, full-width on mobile with attractive gradient styling and clear call-to-action buttons",
+    "categoryId": "17582046453730"
+  },
   "lab-form": {
     "contentMarkdown": "**Laboratory Form** - Laboratory Name: Required text input - Contact Person: Optional text input - Contact Phone: Optional text input - Results Link: Optional URL input - SLA Days: Optional number input",
     "categoryId": "17582046453733"
@@ -232,7 +240,7 @@
     "categoryId": "Interaction"
   },
   "main-layout": {
-    "contentMarkdown": "Adaptive responsive layout system:\n\n- Theme color: Clean whites, subtle grays, with blue (#2563eb) accent system\n- Font: System font stack optimized for cross-platform readability\n- Border radius style: Consistent rounded corners (md) for interactive components\n\nIntelligent responsive behavior:\n- **Desktop**: Full sidebar (256px) + header bar + main content\n- **Mobile**: Compact header + bottom navigation + full-width content\n- **Transitions**: Smooth responsive breakpoints at 768px (md:)\n- **Touch-optimized**: Proper touch targets and spacing on mobile",
+    "contentMarkdown": "Responsive main layout container:\n\n- Theme color: Clean whites and subtle grays with blue accents\n- Font: System font stack optimized for readability  \n- Border radius style: Consistent rounded corners throughout\n\nFlexible layout that adapts: mobile uses bottom nav + full-width content, desktop uses sidebar + main content area",
     "categoryId": "17582046453730"
   },
   "medical-opinion-card": {
@@ -244,11 +252,15 @@
     "categoryId": "Interaction"
   },
   "mobile-header": {
-    "contentMarkdown": "Clean and organized mobile header design:\n\n- Theme color: Clean whites with subtle shadows for definition\n- Font: System font stack with appropriate sizing for mobile screens\n- Border radius style: No radius for header components to maintain clean lines\n\nCompact layout showing logo + app title on left, user info + logout on right, optimized for small screens",
+    "contentMarkdown": "Mobile-optimized header design:\n\n- Theme color: Clean white background with subtle shadows\n- Font: System font stack with optimized sizes for mobile\n- Border radius style: No border radius, clean rectangular design\n\nCompact header showing logo, app title, user first name, profile badge and logout button in efficient layout",
     "categoryId": "17582046453730"
   },
   "mobile-nav": {
     "contentMarkdown": "Mobile navigation bar with responsive design:\n\n- Theme color: Blue (#2563eb) for active states\n- Font: System font stack for consistency\n- Border radius style: Rounded buttons (md radius)\n\nGrid layout showing first 4 main navigation items as icon+label buttons in 4-column layout",
+    "categoryId": "17582046453730"
+  },
+  "mobile-nav-container": {
+    "contentMarkdown": "Mobile navigation bar design:\n\n- Theme color: Blue (#2563eb) for active states, subtle grays for inactive\n- Font: System font with compact sizing for mobile\n- Border radius style: Rounded buttons (sm radius)\n\nGrid-based navigation showing 4 main functions as icon+label buttons with clean spacing and touch-friendly sizing",
     "categoryId": "17582046453730"
   },
   "nav-change-password": {
@@ -315,6 +327,10 @@
     "contentMarkdown": "**Patient Selection Section** Patient selection area with search functionality, dropdown selection, and new patient registration button for easy patient management",
     "categoryId": "17582046453732"
   },
+  "pwa-install-prompt": {
+    "contentMarkdown": "**PWA Installation Component**\n\n- Installation Card\n  - Smartphone Icon\n  - Title: \"Instalar App no seu Dispositivo\"\n  - Description: Installation benefits explanation\n  - Install Button\n  - Dismiss Button\n  - Close Button\n- Auto-detection of installation capability\n- Session storage for dismissed state\n- Responsive positioning and sizing",
+    "categoryId": "17582046453732"
+  },
   "requested-exams-section": {
     "contentMarkdown": "**Requested Exams Section** Checkbox section for selecting exam types (Citologia Oncótica and DNA HPV) with validation requiring at least one selection",
     "categoryId": "17582046453732"
@@ -354,6 +370,10 @@
   "secretary-reminder": {
     "contentMarkdown": "**Click Event**\nDisplay reminder note for secretaries to communicate the next consultation date to both patient and commercial team",
     "categoryId": "17582046453731"
+  },
+  "self-edit-warning": {
+    "contentMarkdown": "**Self-Edit Security Warning**\n- Warning Message\n- Amber Background\n- Security Icon\n- Explanation Text",
+    "categoryId": "17582046453732"
   },
   "siPKBB64fOxDDA2L": {
     "contentMarkdown": "**Line Break Element** Simple line break for formatting in consultation date information",
@@ -412,7 +432,7 @@
     "categoryId": "17582046453732"
   },
   "user-form": {
-    "contentMarkdown": "**Enhanced User Management Form**\n- Nome Completo: Single line input\n  - Required\n  - Validation: Not empty\n  - Placeholder: Nome completo do usuário\n- Email: Single line input\n  - Required\n  - Validation: Email format\n  - Placeholder: email@casalmonken.com.br\n- Senha: Password input\n  - Required for new users\n  - Optional for editing (leave empty to keep current)\n  - Placeholder: Senha do usuário\n- Perfil: Select dropdown\n  - Required\n  - Options: Secretária, Médico, Administrador, Superusuário\n- Usuário ativo: Smart switch toggle\n  - Default: true\n  - **Disabled for self-editing with warning message**\n- Submit Button: Create/Update based on context\n- Cancel Button: Closes dialog without saving",
+    "contentMarkdown": "**User Management Form with Security Controls**\n\n- Nome Completo: Single line input\n  - Required\n  - Validation: Not empty\n  - Placeholder: Nome completo do usuário\n- Email: Single line input\n  - Required\n  - Validation: Email format\n  - Placeholder: email@casalmonken.com.br\n- Senha: Password input\n  - Required for new users\n  - Optional for editing (leave empty to keep current)\n  - Placeholder: Senha do usuário\n- Perfil: Select dropdown\n  - Required\n  - Options: Secretária, Médico, Administrador, Superusuário\n- Usuário ativo: Switch toggle\n  - Default: true\n  - Hidden when user is editing themselves (security measure)\n  - Shows warning message when self-editing\n- Submit Button\n- Cancel Button",
     "categoryId": "17582046453733"
   },
   "user-management-container": {

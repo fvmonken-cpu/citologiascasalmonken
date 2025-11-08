@@ -3,3 +3,30 @@
   X-Content-Type-Options: nosniff
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
+
+# PWA Headers
+/manifest.json
+  Content-Type: application/manifest+json
+  Cache-Control: public, max-age=86400
+
+/sw.js
+  Content-Type: application/javascript
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+# Static assets caching
+/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Icons and images
+/favicon.*
+  Cache-Control: public, max-age=86400
+  
+/*.png
+  Cache-Control: public, max-age=86400
+  
+/*.svg
+  Cache-Control: public, max-age=86400
+  
+/*.ico
+  Cache-Control: public, max-age=86400

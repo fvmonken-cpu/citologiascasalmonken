@@ -12,6 +12,53 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Citologias Casal Monken</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Sistema de Gestão de Exames de Citologia Oncótica - Espaço Casal Monken" />
+    <meta name="keywords" content="citologia, oncótica, exames, ginecologia, obstetrícia, casal monken" />
+    <meta name="author" content="Espaço Casal Monken" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="background-color" content="#ffffff" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Citologia CM" />
+    <link rel="apple-touch-icon" href="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" />
+    
+    <!-- Windows PWA Meta Tags -->
+    <meta name="msapplication-TileImage" content="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" />
+    <meta name="msapplication-TileColor" content="#2563eb" />
+    
+    <!-- Security Meta Tags -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https: wss:; img-src 'self' data: https:; font-src 'self' data: https:;" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Citologia Oncótica - Casal Monken" />
+    <meta property="og:description" content="Sistema de Gestão de Exames de Citologia Oncótica" />
+    <meta property="og:image" content="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" />
+    <meta property="og:type" content="website" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" as="image" />
+    
+    <!-- Install Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('✅ Service Worker registrado:', registration.scope);
+            })
+            .catch((error) => {
+              console.error('❌ Erro ao registrar Service Worker:', error);
+            });
+        });
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
