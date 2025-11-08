@@ -48,17 +48,17 @@ export const AuthProvider: React.FC<{
             const { data: users, error } = await supabase.from('users').select('*').eq('email', email).eq('ativo', true).single();
             if (error) {
                 console.error('❌ Erro ao buscar usuário:', error);
-                toast.error('Credenciais inválidas');
+                toast.error('Email ou senha incorretos. Verifique suas credenciais e tente novamente.');
                 return false;
             }
             if (!users) {
                 console.log('❌ Usuário não encontrado');
-                toast.error('Credenciais inválidas');
+                toast.error('Email ou senha incorretos. Verifique suas credenciais e tente novamente.');
                 return false;
             }
             if (users.senha_hash !== password) {
                 console.log('❌ Senha incorreta');
-                toast.error('Credenciais inválidas');
+                toast.error('Email ou senha incorretos. Verifique suas credenciais e tente novamente.');
                 return false;
             }
             console.log('✅ Login realizado com sucesso para:', users.email);

@@ -8,6 +8,7 @@ import ExamHistory from '@/components/ExamHistory';
 import ExamRegistration from '@/components/ExamRegistration';
 import LabManagement from '@/components/LabManagement';
 import PatientManagement from '@/components/PatientManagement';
+import UserManagement from '@/components/UserManagement';
 import ChangePassword from '@/components/ChangePassword';
 import { Loader2 } from 'lucide-react';
 const Index = ()=>{
@@ -66,6 +67,8 @@ const Index = ()=>{
                 return <LabManagement data-spec-id="lab-management-component"/>;
             case 'exams':
                 return <ExamRegistration onSuccess={()=>setCurrentPage('dashboard')} data-spec-id="exam-registration-component"/>;
+            case 'users':
+                return <UserManagement data-spec-id="user-management-component"/>;
             case 'reports':
                 return (<div className="text-center py-12" data-spec-id="reports-placeholder">
             <h2 className="text-2xl font-bold text-gray-900 mb-4" data-spec-id="I7IyujoYriPfegeB">Relatórios</h2>
