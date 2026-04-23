@@ -33,6 +33,9 @@ Evolução do projeto em ordem cronológica (última atualização: 2026-04-23):
 9. **FK `audit_logs.user_id` com `ON DELETE SET NULL`** (2026-04-23) — aplicado via SQL direto no editor (não tem arquivo de migration). Permite hard-delete de usuários sem histórico, mas exclusão ainda pode falhar por outras FKs (`exames.medico_id`, `patients.medico_responsavel_id`). Regra prática: **desativar, não excluir**.
 10. **Git + GitHub** (2026-04-23) — repositório local inicializado e pushado para `github.com/fvmonken-cpu/citologiascasalmonken`. Netlify configurado com auto-deploy a partir da branch `main` — `git push` dispara rebuild automático. Primeiro commit: `c886e2f`.
 11. **Manuais de uso** (2026-04-23) — `MANUAL_SECRETARIA.md/pdf`, `MANUAL_MEDICO.md/pdf`, `MANUAL_ADMINISTRADOR.md/pdf` na raiz. Gerados com `scripts/md-to-pdf.cjs` (usa Chrome headless local, dep `marked` não está no `package.json` — instalar com `npm install --no-save marked` antes de rodar).
+12. **Fixes pós-produção reportados pela Secretária** (2026-04-23) — dois bugs corrigidos enquanto o perfil Secretaria testava o sistema:
+    - **RLS de `users` bloqueava Secretaria/Medico de ler o médico responsável em `ExamDetails`** (PGRST116 → "Exame não encontrado"). Migration `000009` amplia `users_select` para `auth.uid() IS NOT NULL` (qualquer autenticado pode SELECT). INSERT/UPDATE/DELETE seguem restritos.
+    - **Trigger `exam_status_push` e cron SLA chamavam `net.http_post` com `body` em `text`** (erro 42883 ao avançar status). Migration `000010` corrige `body` para `jsonb` em ambos.
 
 ---
 
@@ -40,7 +43,7 @@ Evolução do projeto em ordem cronológica (última atualização: 2026-04-23):
 
 - **Produção**: [citologiascasalmonken.netlify.app](https://citologiascasalmonken.netlify.app) — funcional.
 - **Repositório**: `github.com/fvmonken-cpu/citologiascasalmonken` — **Netlify auto-deploy ativo**. `git push` para `main` dispara rebuild e publicação sem ação manual.
-- **Migrations aplicadas**: 8 (ver tabela abaixo). Todas em produção, incluindo `000006_remove_senha_hash.sql` (aplicada em 2026-04-23 via SQL Editor).
+- **Migrations aplicadas**: 10 (ver tabela abaixo). Todas em produção; `000006`, `000009` e `000010` aplicadas via SQL Editor em 2026-04-23.
 - **Outras alterações SQL sem arquivo de migration**: `audit_logs.user_id` convertido para `ON DELETE SET NULL` (2026-04-23).
 - **Edge Functions deployadas**: `create-user`, `send-push-notification`.
 - **Service Worker**: versão `citologia-casal-monken-v1.2.0` — **lembrar de incrementar** antes do próximo deploy que mexa em JS.
@@ -119,9 +122,10 @@ Navegação é estado local React (`currentPage: string`). Não há React Router
 
 ### Row Level Security (RLS)
 
-Todas as tabelas têm RLS ativo. Regra importante:
+Todas as tabelas têm RLS ativo. Regras importantes:
 
-- **`public.users`**: usa `auth.jwt() -> 'user_metadata' ->> 'perfil'` (não pode usar `get_user_perfil()` — causaria recursão/hang)
+- **`public.users` SELECT**: aberto a qualquer autenticado (migration `000009`). Frontend depende disso para renderizar nome do médico responsável em `ExamDetails` e lista de usuários nos logs de auditoria. Colunas expostas: `id, nome, email, perfil, ativo, created_at, updated_at` — sem dados sensíveis (senha_hash removida em migration `000006`).
+- **`public.users` UPDATE/DELETE**: usa `auth.jwt() -> 'user_metadata' ->> 'perfil'` (não pode usar `get_user_perfil()` — causaria recursão/hang). UPDATE: próprio registro ou Admin/Super. DELETE: apenas Superusuario.
 - **Demais tabelas** (`patients`, `exames`, `labs`, `audit_logs`): usam `get_user_perfil(auth.uid())` — função SECURITY DEFINER que lê `public.users` bypassando RLS
 
 Quando o perfil de um usuário é atualizado em `public.users`, o JWT dele ainda tem o perfil antigo até o próximo login. Por isso, `UserManagement` chama a Edge Function `create-user` com `action: 'update_profile'` para sincronizar `auth.users.user_metadata`.
@@ -191,13 +195,16 @@ VAPID_SUBJECT=mailto:...
 | `000006_remove_senha_hash.sql` | Remove coluna `senha_hash` de `public.users` (aplicada em 2026-04-23) |
 | `000007_fix_trigger_key.sql` | Re-cria trigger/cron com `service_role_key` hardcoded |
 | `000008_fix_users_rls_jwt.sql` | Corrige RLS de `users` para usar `auth.jwt()` (evita recursão) |
+| `000009_users_select_all_authenticated.sql` | Abre SELECT em `users` para qualquer autenticado (UPDATE/DELETE seguem restritos) |
+| `000010_fix_http_post_body_jsonb.sql` | `net.http_post` no trigger e cron passava `body` como text; corrigido para `jsonb` |
 
 ---
 
 ## Armadilhas conhecidas
 
 - **Não chamar `supabase.from()` diretamente dentro de `onAuthStateChange`** sem `setTimeout(0)` — trava por deadlock de mutex.
-- **`users_select` policy não pode usar `get_user_perfil()`** — causaria recursão. Usar `auth.jwt() -> 'user_metadata' ->> 'perfil'`.
+- **`users_select` policy não pode usar `get_user_perfil()`** — causaria recursão. Hoje a policy só exige `auth.uid() IS NOT NULL` (migration 009); se for restringir de novo por perfil, ler via `auth.jwt() -> 'user_metadata' ->> 'perfil'`. **Não restringir por `id = auth.uid()`** sem repensar `ExamDetails` e `loadAuditLogs`, que dependem de ler outros users.
+- **`net.http_post` exige `body jsonb`** — passar `::text` ou string literal sem cast dispara erro 42883 em runtime. Sempre usar `jsonb_build_object(...)` ou `'...'::jsonb`.
 - **Supabase re-emite `SIGNED_IN` ao retornar à aba** — ignorar no `onAuthStateChange` se `loadedUserIdRef.current === session.user.id`.
 - **`TOKEN_REFRESHED`** dispara `onAuthStateChange` a cada ~1h — ignorar para não recarregar o Dashboard.
 - **Secrets de Edge Functions não podem ter prefixo `SUPABASE_`** — usar `SERVICE_ROLE_KEY`, não `SUPABASE_SERVICE_ROLE_KEY`.
