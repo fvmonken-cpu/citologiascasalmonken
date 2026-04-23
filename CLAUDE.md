@@ -7,7 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Sistema de controle de exames de citologia oncótica (rastreamento de câncer cervical) para o Espaço Casal Monken. Rastreia o ciclo completo de cada exame: coleta → laboratório → resultado → parecer médico → comunicação à paciente.
 
 Implantado em produção em: **https://citologiascasalmonken.netlify.app**  
-Backend Supabase: **projeto `pzddfexyonmlvqdazgms`**
+Backend Supabase: **projeto `pzddfexyonmlvqdazgms`**  
+Repositório: **https://github.com/fvmonken-cpu/citologiascasalmonken** (branch `main`, auto-deploy Netlify)
 
 ---
 
@@ -27,18 +28,25 @@ Evolução do projeto em ordem cronológica (última atualização: 2026-04-23):
    - Edge Function `send-push-notification` (tipos `status_change` e `sla_check`)
    - Hook `src/hooks/usePushNotifications.ts` + botão 🔔/🔕 no `Layout.tsx`
 6. **Fixes de ciclo de vida do AuthContext** — `setTimeout(0)` obrigatório dentro de `onAuthStateChange` (evita deadlock do mutex do auth client); `TOKEN_REFRESHED` e re-emissões de `SIGNED_IN` ao voltar à aba são ignorados para não recarregar o Dashboard.
-7. **Service Worker** (`public/sw.js` v1.1.0) — cache-first para assets locais, passthrough para Supabase API.
+7. **Service Worker** (`public/sw.js`) — cache-first para assets locais, passthrough para Supabase API. Versão atual: `v1.2.0`.
+8. **UI `UserManagement`** (2026-04-23) — listagem dividida em dois cards: "Usuários Ativos" e "Usuários Inativos" (filtro por `u.ativo`). Helper `renderUserTable(list)` evita duplicação. Card de inativos usa `opacity-80`.
+9. **FK `audit_logs.user_id` com `ON DELETE SET NULL`** (2026-04-23) — aplicado via SQL direto no editor (não tem arquivo de migration). Permite hard-delete de usuários sem histórico, mas exclusão ainda pode falhar por outras FKs (`exames.medico_id`, `patients.medico_responsavel_id`). Regra prática: **desativar, não excluir**.
+10. **Git + GitHub** (2026-04-23) — repositório local inicializado e pushado para `github.com/fvmonken-cpu/citologiascasalmonken`. Netlify configurado com auto-deploy a partir da branch `main` — `git push` dispara rebuild automático. Primeiro commit: `c886e2f`.
+11. **Manuais de uso** (2026-04-23) — `MANUAL_SECRETARIA.md/pdf`, `MANUAL_MEDICO.md/pdf`, `MANUAL_ADMINISTRADOR.md/pdf` na raiz. Gerados com `scripts/md-to-pdf.cjs` (usa Chrome headless local, dep `marked` não está no `package.json` — instalar com `npm install --no-save marked` antes de rodar).
 
 ---
 
 ## Estado atual
 
 - **Produção**: [citologiascasalmonken.netlify.app](https://citologiascasalmonken.netlify.app) — funcional.
-- **Migrations aplicadas**: 8 (ver tabela abaixo). Todas aplicadas em produção, incluindo `000006_remove_senha_hash.sql` (coluna removida em 2026-04-23 via SQL Editor).
+- **Repositório**: `github.com/fvmonken-cpu/citologiascasalmonken` — **Netlify auto-deploy ativo**. `git push` para `main` dispara rebuild e publicação sem ação manual.
+- **Migrations aplicadas**: 8 (ver tabela abaixo). Todas em produção, incluindo `000006_remove_senha_hash.sql` (aplicada em 2026-04-23 via SQL Editor).
+- **Outras alterações SQL sem arquivo de migration**: `audit_logs.user_id` convertido para `ON DELETE SET NULL` (2026-04-23).
 - **Edge Functions deployadas**: `create-user`, `send-push-notification`.
-- **Service Worker**: versão `citologia-casal-monken-v1.1.0` — **lembrar de incrementar** antes do próximo deploy que mexa em JS.
+- **Service Worker**: versão `citologia-casal-monken-v1.2.0` — **lembrar de incrementar** antes do próximo deploy que mexa em JS.
 - **Dependências**: React 18.3.1, Vite 5.4.10, @supabase/supabase-js 2.45.4, TypeScript 5.6.3. `react-router-dom` está instalado mas não é usado (navegação é switch/case em `Index.tsx`).
 - **Perfis ativos**: `Superusuario`, `Administrador`, `Secretaria`, `Medico` — RLS enforçando corretamente (médico vê só seus exames/pacientes).
+- **Arquivos com segredos NÃO commitados** (protegidos pelo `.gitignore`): `.env.local`, `Supabase EnsiNati.txt` (contém Stripe LIVE keys — recomendar rotação ao usuário), `migration_update_passwords.sql`.
 
 ---
 
@@ -62,12 +70,20 @@ npm run build     # build de produção → pasta dist/
 npm run lint      # ESLint
 npm run format    # Prettier em ts/tsx/md/html
 
-# Deploy para Netlify (depois de cada alteração)
-npm run build && netlify deploy --prod --dir=dist
+# Deploy para produção (fluxo atual): basta git push.
+# Netlify detecta o push em main e roda npm install + npm run build automaticamente.
+git add <arquivos> && git commit -m "..." && git push
 
-# Deploy de Edge Function específica
+# Deploy manual via CLI (fallback se o auto-deploy falhar — requer netlify login):
+npx netlify-cli@latest deploy --prod --dir=dist
+
+# Deploy de Edge Function específica (não é disparado pelo push)
 supabase functions deploy create-user
 supabase functions deploy send-push-notification
+
+# Regerar PDFs dos manuais a partir dos .md
+npm install --no-save marked
+node scripts/md-to-pdf.cjs MANUAL_SECRETARIA.md MANUAL_SECRETARIA.pdf
 
 # Rodar script de migração de usuários (não re-executar — já foi aplicado)
 npx tsx scripts/migrate-users-to-auth.ts
@@ -187,3 +203,7 @@ VAPID_SUBJECT=mailto:...
 - **Secrets de Edge Functions não podem ter prefixo `SUPABASE_`** — usar `SERVICE_ROLE_KEY`, não `SUPABASE_SERVICE_ROLE_KEY`.
 - **`ALTER DATABASE SET` não é permitido** no Supabase managed — service role key fica hardcoded no trigger SQL (migration 007).
 - **Cache do Service Worker**: após deploy com mudanças de JS, incrementar `CACHE_NAME` em `public/sw.js` para forçar invalidação nos browsers.
+- **Edge Function `create-user` faz `INSERT` em `public.users` sem `senha_hash`** — se a coluna ainda existir como `NOT NULL`, o endpoint retorna 500. Migration 006 já aplicada; se reaparecer o erro, checar se alguém re-adicionou a coluna.
+- **Hard-delete de usuário pode falhar por FK** — mesmo com `audit_logs.user_id ON DELETE SET NULL`, outras tabelas (`exames.medico_id`, `patients.medico_responsavel_id`) ainda bloqueiam. Regra: **desativar, não excluir**. O frontend já filtra o botão de excluir via `canDeleteUser()`, mas a exclusão em si pode falhar no backend.
+- **Git config no Windows**: ao `git init` em `D:\`, aparece `fatal: detected dubious ownership`. Fix: `git config --global --add safe.directory D:/project-7757-controle-citologias`.
+- **Segredos em arquivos `.txt` soltos**: o `.gitignore` protege `Supabase EnsiNati.txt` e `migration_update_passwords.sql`, mas eles continuam no disco em texto claro (risco via backup/sincronização). O arquivo `Supabase EnsiNati.txt` contém **Stripe LIVE keys** — rotação recomendada.
