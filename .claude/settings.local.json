@@ -19,7 +19,19 @@
       "Bash(git init *)",
       "Bash(git config *)",
       "Bash(git check-ignore *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m 'Sincroniza estado atual do projeto com o repositório *)",
+      "Bash(git branch *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(npx --yes netlify-cli@latest deploy --prod --dir=dist)",
+      "Bash(curl -s https://citologiascasalmonken.netlify.app/)",
+      "Bash(curl -s https://citologiascasalmonken.netlify.app/assets/index-BvsXSX5O.js)",
+      "Bash(curl -s https://citologiascasalmonken.netlify.app/sw.js)",
+      "Bash(npm ls *)",
+      "Bash(node scripts/md-to-pdf.cjs MANUAL_SECRETARIA.md MANUAL_SECRETARIA.pdf)",
+      "Bash(node scripts/md-to-pdf.cjs MANUAL_MEDICO.md MANUAL_MEDICO.pdf)",
+      "Bash(node scripts/md-to-pdf.cjs MANUAL_ADMINISTRADOR.md MANUAL_ADMINISTRADOR.pdf)"
     ]
   }
 }
