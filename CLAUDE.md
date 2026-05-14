@@ -38,6 +38,7 @@ Evolução do projeto em ordem cronológica (última atualização: 2026-05-13):
     - **Trigger `exam_status_push` e cron SLA chamavam `net.http_post` com `body` em `text`** (erro 42883 ao avançar status). Migration `000010` corrige `body` para `jsonb` em ambos.
 13. **Remoção do Pinspec + correção de logo e performance** (2026-05-13) — Pinspec CDN saiu do ar, derrubando a logo (`cdn-pinspec-public.pinspec.ai`) e travando carregamento por: preload de imagem morta, `cache.addAll` falhando no SW, `/specai_dev.js` rodando em prod, e plugin `specai-vite-plugin` ativo no build. Substituída por asset local transparente (`public/logo-casal-monken.png`, gerada via chroma key com `sharp`). SW bumpado para `v1.3.0` com `addAll` tolerante a falhas. Removidos `specai-vite-plugin.js` e `public/specai_dev.js`.
 14. **Performance: paralelização de loaders + fix do manifest** (2026-05-13, parte 2) — corrigido `manifest.json` que ficou pra trás no plano anterior (ainda apontava para Pinspec, causando erro `Unexpected data after root element`). Loaders de `Dashboard`, `ExamHistory`, `ExamRegistration` e `ExamDetails` migraram de awaits em série para `Promise.all`, reduzindo logout→login de ~6 round-trips sequenciais para ~2. SW bumpado para `v1.4.0`.
+15. **Dashboard da Secretaria + Listagem Geral de Exames** (2026-05-13, parte 3) — dashboard reorganizado para o perfil Secretaria com filtros por médico e laboratório, 3 KPIs e 3 categorias colapsáveis de exames com ação pendente (comunicar pacientes, aguardando parecer médico, fora do SLA do laboratório). Filtros afetam KPIs e listas das categorias. Cards com itens nascem colapsados; vazios nascem expandidos com placeholder. Removidas as 7 colunas antigas de contagem de status e a seção "Exames Recentes" do rodapé para esse perfil. Nova página `ExamList.tsx` (nav "Listagem Geral") com filtros (período, médico, status, lab), default 90 dias, ordem por `data_coleta` desc, excluindo arquivados.
 
 ---
 
@@ -51,6 +52,7 @@ Evolução do projeto em ordem cronológica (última atualização: 2026-05-13):
 - **Service Worker**: versão `citologia-casal-monken-v1.4.0` — **lembrar de incrementar** antes do próximo deploy que mexa em JS.
 - **Dependências**: React 18.3.1, Vite 5.4.10, @supabase/supabase-js 2.45.4, TypeScript 5.6.3. `react-router-dom` está instalado mas não é usado (navegação é switch/case em `Index.tsx`).
 - **Perfis ativos**: `Superusuario`, `Administrador`, `Secretaria`, `Medico` — RLS enforçando corretamente (médico vê só seus exames/pacientes).
+- **UX por perfil**: Dashboard da Secretaria tem layout próprio (filtros + KPIs + categorias colapsáveis); outros perfis veem o layout original. Reavaliar se Médico/Admin merecem versão própria depois.
 - **Arquivos com segredos NÃO commitados** (protegidos pelo `.gitignore`): `.env.local`, `Supabase EnsiNati.txt` (contém Stripe LIVE keys — recomendar rotação ao usuário), `migration_update_passwords.sql`.
 
 ---
