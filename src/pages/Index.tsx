@@ -10,6 +10,7 @@ import LabManagement from '@/components/LabManagement';
 import PatientManagement from '@/components/PatientManagement';
 import UserManagement from '@/components/UserManagement';
 import ChangePassword from '@/components/ChangePassword';
+import ExamList from '@/components/ExamList';
 import { Loader2 } from 'lucide-react';
 const Index = ()=>{
     const { user, loading } = useAuth();
@@ -65,6 +66,8 @@ const Index = ()=>{
         switch(currentPage){
             case 'dashboard':
                 return <Dashboard onViewExam={handleViewExam} data-spec-id="hvArFzhCrJrwCAbL"/>;
+            case 'exam-list':
+                return <ExamList onViewExam={handleViewExam}/>;
             case 'history':
                 return <ExamHistory onViewExam={handleViewExam} data-spec-id="history-component"/>;
             case 'patients':

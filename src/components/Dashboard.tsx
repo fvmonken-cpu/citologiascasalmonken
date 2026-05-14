@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Exam, User, Patient, Lab, ExamStatus } from '@/types/database';
-import { Search, Filter, Clock, CheckCircle, AlertCircle, Eye, ArrowUpDown, CalendarDays, AlertTriangle, Stethoscope, FileText, FlaskConical, Phone } from 'lucide-react';
+import { Search, Filter, Clock, CheckCircle, AlertCircle, Eye, ArrowUpDown, CalendarDays, AlertTriangle, Stethoscope, FileText, FlaskConical, Phone, ChevronDown, ChevronUp } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { toast } from 'sonner';
 import { formatDateBR } from '@/lib/dateUtils';
 interface DashboardProps {
@@ -15,6 +16,7 @@ interface DashboardProps {
 }
 const Dashboard: React.FC<DashboardProps> = ({ onViewExam })=>{
     const { user } = useAuth();
+    const isSecretaria = user?.perfil === 'Secretaria';
     const [exams, setExams] = useState<Exam[]>([]);
     const [users, setUsers] = useState<User[]>([]);
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -24,6 +26,8 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewExam })=>{
     const [filterMedico, setFilterMedico] = useState('todos');
     const [filterStatus, setFilterStatus] = useState('todos');
     const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'date-desc' | 'collection-desc'>('date-desc');
+    const [filterMedicoSec, setFilterMedicoSec] = useState('todos');
+    const [filterLabSec, setFilterLabSec] = useState('todos');
     useEffect(()=>{
         loadData();
     }, [
@@ -128,6 +132,11 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewExam })=>{
                 return tipo;
         }
     };
+    const getExamsToCommunicate = ()=>{
+        return exams.filter((exam)=>exam.status === 'Parecer Médico Emitido').sort((a, b)=>{
+            return new Date(b.data_parecer_emitido || b.updated_at).getTime() - new Date(a.data_parecer_emitido || a.updated_at).getTime();
+        });
+    };
     const getExamsWithReturnSchedule = ()=>{
         return exams.filter((exam)=>exam.status === 'Parecer Médico Emitido' && exam.tipo_retorno && exam.tipo_retorno !== 'Imediato' && exam.data_proxima_consulta).sort((a, b)=>{
             if (!a.data_proxima_consulta || !b.data_proxima_consulta) return 0;
@@ -220,6 +229,199 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewExam })=>{
           <p className="mt-2 text-gray-600" data-spec-id="GDw11cdTmEecbgYV">Carregando dashboard...</p>
         </div>
       </div>);
+    }
+    if (isSecretaria) {
+        const examsFiltered = exams.filter((e)=>{
+            const matchMedico = filterMedicoSec === 'todos' || e.medico_id === filterMedicoSec;
+            const matchLab = filterLabSec === 'todos' || e.lab_id === filterLabSec;
+            return matchMedico && matchLab;
+        });
+        const examsToCommunicate = examsFiltered
+            .filter((e)=>e.status === 'Parecer Médico Emitido')
+            .sort((a, b)=>new Date(b.data_parecer_emitido || b.updated_at).getTime() - new Date(a.data_parecer_emitido || a.updated_at).getTime());
+        const examsAwaitingOpinionSec = examsFiltered
+            .filter((e)=>e.status === 'Resultado Liberado')
+            .sort((a, b)=>new Date(b.data_resultado_liberado || b.updated_at).getTime() - new Date(a.data_resultado_liberado || a.updated_at).getTime());
+        const examsOverSLASec = examsFiltered.filter((exam)=>{
+            if (!exam.data_recolhido_lab || exam.status === 'Amostra Coletada') return false;
+            const lab = labs.find((l)=>l.id === exam.lab_id);
+            if (!lab?.sla_dias) return false;
+            const recolhidoDate = new Date(exam.data_recolhido_lab);
+            const today = new Date();
+            recolhidoDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+            const daysInLab = Math.floor((today.getTime() - recolhidoDate.getTime()) / (1000 * 60 * 60 * 24));
+            return daysInLab > lab.sla_dias;
+        }).sort((a, b)=>{
+            const daysOverSLA_A = getDaysOverSLA(a);
+            const daysOverSLA_B = getDaysOverSLA(b);
+            return daysOverSLA_B - daysOverSLA_A;
+        });
+        return (
+            <div className="space-y-6" data-spec-id="dashboard-secretaria-container">
+                <div className="flex justify-between items-center">
+                    <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+                    <Button variant="outline" size="sm" onClick={loadData}>Atualizar</Button>
+                </div>
+
+                {/* Filtros */}
+                <Card>
+                    <CardContent className="p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <Select value={filterMedicoSec} onValueChange={setFilterMedicoSec}>
+                                <SelectTrigger><SelectValue placeholder="Médico"/></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="todos">Todos os médicos</SelectItem>
+                                    {users.filter((u)=>u.perfil === 'Medico').map((m)=>(
+                                        <SelectItem key={m.id} value={m.id}>{m.nome}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Select value={filterLabSec} onValueChange={setFilterLabSec}>
+                                <SelectTrigger><SelectValue placeholder="Laboratório"/></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="todos">Todos os laboratórios</SelectItem>
+                                    {labs.map((l)=>(
+                                        <SelectItem key={l.id} value={l.id}>{l.nome}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Button
+                                variant="outline"
+                                onClick={()=>{ setFilterMedicoSec('todos'); setFilterLabSec('todos'); }}
+                                disabled={filterMedicoSec === 'todos' && filterLabSec === 'todos'}
+                            >
+                                Limpar filtros
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* 3 KPIs grandes */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card className="border-l-4 border-l-blue-500">
+                        <CardContent className="p-6">
+                            <div className="text-sm text-gray-600">Para comunicar pacientes</div>
+                            <div className="text-4xl font-bold text-blue-700 mt-2">{examsToCommunicate.length}</div>
+                        </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-yellow-500">
+                        <CardContent className="p-6">
+                            <div className="text-sm text-gray-600">Aguardando parecer médico</div>
+                            <div className="text-4xl font-bold text-yellow-700 mt-2">{examsAwaitingOpinionSec.length}</div>
+                        </CardContent>
+                    </Card>
+                    <Card className="border-l-4 border-l-red-500">
+                        <CardContent className="p-6">
+                            <div className="text-sm text-gray-600">Fora do prazo do laboratório</div>
+                            <div className="text-4xl font-bold text-red-700 mt-2">{examsOverSLASec.length}</div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Categoria 1: comunicar pacientes */}
+                <CollapsibleSection
+                    title="Para comunicar pacientes"
+                    count={examsToCommunicate.length}
+                    accentColor="border-l-blue-500"
+                    emptyMessage="Nada por aqui — nenhum exame aguardando comunicação à paciente."
+                >
+                    <div className="space-y-3">
+                        {examsToCommunicate.map((exam)=>{
+                            const needsCommercial = exam.tipo_retorno && exam.tipo_retorno !== 'Imediato';
+                            return (
+                                <div key={exam.id} className="p-3 border rounded-lg bg-blue-50 border-blue-200">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex-1">
+                                            <h4 className="font-medium text-gray-900">{getPatientName(exam.patient_id)}</h4>
+                                            <p className="text-sm text-gray-600">Frasco: {exam.numero_frasco} • Dr(a). {getMedicoName(exam.medico_id)}</p>
+                                            <div className="flex items-center space-x-2 mt-1">
+                                                <Badge className="bg-blue-100 text-blue-800 text-xs">Comunicar paciente</Badge>
+                                                {needsCommercial && <Badge className="bg-orange-100 text-orange-800 text-xs">Comunicar Comercial</Badge>}
+                                            </div>
+                                        </div>
+                                        {onViewExam && (
+                                            <Button variant="outline" size="sm" onClick={()=>onViewExam(exam.id)}>
+                                                <Eye className="w-4 h-4 mr-1"/>Ver
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </CollapsibleSection>
+
+                {/* Categoria 2: aguardando parecer */}
+                <CollapsibleSection
+                    title="Aguardando parecer médico"
+                    count={examsAwaitingOpinionSec.length}
+                    accentColor="border-l-yellow-500"
+                    emptyMessage="Nada por aqui — nenhum exame aguardando parecer médico."
+                >
+                    <div className="space-y-3">
+                        {examsAwaitingOpinionSec.map((exam)=>(
+                            <div key={exam.id} className={`p-3 border rounded-lg ${isWaitingTooLong(exam) ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'}`}>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                        <h4 className="font-medium text-gray-900">{getPatientName(exam.patient_id)}</h4>
+                                        <p className="text-sm text-gray-600">Frasco: {exam.numero_frasco} • Dr(a). {getMedicoName(exam.medico_id)}</p>
+                                        <p className="text-xs text-gray-500 mt-1">Liberado: {formatDateBR(exam.data_resultado_liberado!)} • {getDaysWaiting(exam)} {getDaysWaiting(exam) === 1 ? 'dia' : 'dias'} esperando</p>
+                                    </div>
+                                    {onViewExam && (
+                                        <Button variant="outline" size="sm" onClick={()=>onViewExam(exam.id)}>
+                                            <Eye className="w-4 h-4 mr-1"/>Ver
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </CollapsibleSection>
+
+                {/* Categoria 3: fora do prazo do laboratório */}
+                <CollapsibleSection
+                    title="Fora do prazo do laboratório"
+                    count={examsOverSLASec.length}
+                    accentColor="border-l-red-500"
+                    emptyMessage="Nada por aqui — todos os exames estão dentro do SLA dos laboratórios."
+                >
+                    <div className="space-y-3">
+                        {examsOverSLASec.map((exam)=>{
+                            const lab = labs.find((l)=>l.id === exam.lab_id);
+                            const daysOverSLA = getDaysOverSLA(exam);
+                            return (
+                                <div key={exam.id} className="p-3 border rounded-lg bg-red-50 border-red-200">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex-1">
+                                            <h4 className="font-medium text-gray-900">{getPatientName(exam.patient_id)}</h4>
+                                            <p className="text-sm text-gray-600">Frasco: {exam.numero_frasco} • {getLabName(exam.lab_id)}</p>
+                                            <p className="text-xs text-red-600 font-medium mt-1">+{daysOverSLA} {daysOverSLA === 1 ? 'dia' : 'dias'} fora do prazo (SLA: {lab?.sla_dias} {lab?.sla_dias === 1 ? 'dia' : 'dias'})</p>
+                                        </div>
+                                        <div className="flex items-center space-x-2">
+                                            {lab?.telefone_contato && (
+                                                <Button variant="outline" size="sm" onClick={()=>{
+                                                    const phone = lab.telefone_contato?.replace(/\D/g, '');
+                                                    const message = `Olá! Sou da secretaria do Espaço Casal Monken. O exame da paciente ${getPatientName(exam.patient_id)} (frasco ${exam.numero_frasco}) foi recolhido em ${formatDateBR(exam.data_recolhido_lab!)} e já passou do prazo SLA de ${lab.sla_dias} ${lab.sla_dias === 1 ? 'dia' : 'dias'}. Poderiam nos informar a previsão de liberação?`;
+                                                    window.open(`https://wa.me/55${phone}?text=${encodeURIComponent(message)}`);
+                                                }}>
+                                                    <Phone className="w-4 h-4 mr-1"/>Contatar
+                                                </Button>
+                                            )}
+                                            {onViewExam && (
+                                                <Button variant="outline" size="sm" onClick={()=>onViewExam(exam.id)}>
+                                                    <Eye className="w-4 h-4 mr-1"/>Ver
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </CollapsibleSection>
+            </div>
+        );
     }
     return (<div className="space-y-6" data-spec-id="dashboard-container">
       {}
@@ -572,4 +774,41 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewExam })=>{
       </Card>
     </div>);
 };
+interface CollapsibleSectionProps {
+    title: string;
+    count: number;
+    accentColor: string;
+    emptyMessage: string;
+    children: React.ReactNode;
+}
+
+const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, count, accentColor, emptyMessage, children }) => {
+    const isEmpty = count === 0;
+    const [open, setOpen] = useState(isEmpty);
+    return (
+        <Card className={`border-l-4 ${accentColor}`}>
+            <Collapsible open={open} onOpenChange={setOpen}>
+                <CollapsibleTrigger className="w-full">
+                    <CardHeader className="flex flex-row items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors">
+                        <div className="flex items-center space-x-3">
+                            <CardTitle className="text-lg">{title}</CardTitle>
+                            <Badge className="bg-gray-100 text-gray-700">{count}</Badge>
+                        </div>
+                        {open ? <ChevronUp className="w-5 h-5 text-gray-500"/> : <ChevronDown className="w-5 h-5 text-gray-500"/>}
+                    </CardHeader>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                    <CardContent>
+                        {isEmpty ? (
+                            <div className="text-center py-6 text-gray-500">
+                                <p className="text-sm">{emptyMessage}</p>
+                            </div>
+                        ) : children}
+                    </CardContent>
+                </CollapsibleContent>
+            </Collapsible>
+        </Card>
+    );
+};
+
 export default Dashboard;

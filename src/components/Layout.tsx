@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { LogOut, Users, FileText, BarChart3, UserPlus, FilePlus, Activity, FlaskConical, KeyRound, Bell, BellOff } from 'lucide-react';
+import { LogOut, Users, FileText, BarChart3, UserPlus, FilePlus, Activity, FlaskConical, KeyRound, Bell, BellOff, ClipboardList } from 'lucide-react';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { toast } from 'sonner';
 interface LayoutProps {
@@ -57,6 +57,12 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
             key: 'exams',
             label: 'Novo Exame',
             icon: FilePlus,
+            permission: 'all'
+        },
+        {
+            key: 'exam-list',
+            label: 'Listagem Geral',
+            icon: ClipboardList,
             permission: 'all'
         },
         {
