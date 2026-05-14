@@ -69,12 +69,17 @@ const ExamRegistration: React.FC<ExamRegistrationProps> = ({ onSuccess })=>{
         console.log('📊 Carregando dados para registro de exame...');
         setLoading(true);
         try {
-            const { data: patientsData, error: patientsError } = await supabase.from('patients').select('*').order('nome_completo');
-            if (patientsError) throw patientsError;
-            const { data: labsData, error: labsError } = await supabase.from('labs').select('*').order('nome');
-            if (labsError) throw labsError;
-            const { data: doctorsData, error: doctorsError } = await supabase.from('users').select('id, nome, perfil').eq('perfil', 'Medico').eq('ativo', true).order('nome');
-            if (doctorsError) throw doctorsError;
+            const [patientsRes, labsRes, doctorsRes] = await Promise.all([
+                supabase.from('patients').select('*').order('nome_completo'),
+                supabase.from('labs').select('*').order('nome'),
+                supabase.from('users').select('id, nome, perfil').eq('perfil', 'Medico').eq('ativo', true).order('nome'),
+            ]);
+            if (patientsRes.error) throw patientsRes.error;
+            if (labsRes.error) throw labsRes.error;
+            if (doctorsRes.error) throw doctorsRes.error;
+            const patientsData = patientsRes.data;
+            const labsData = labsRes.data;
+            const doctorsData = doctorsRes.data;
             setPatients(patientsData || []);
             setLabs(labsData || []);
             setDoctors(doctorsData || []);

@@ -54,12 +54,17 @@ const ExamDetails: React.FC<ExamDetailsProps> = ({ examId, onBack, onExamUpdated
         try {
             const { data: examData, error: examError } = await supabase.from('exames').select('*').eq('id', examId).single();
             if (examError) throw examError;
-            const { data: patientData, error: patientError } = await supabase.from('patients').select('*').eq('id', examData.patient_id).single();
-            if (patientError) throw patientError;
-            const { data: medicoData, error: medicoError } = await supabase.from('users').select('*').eq('id', examData.medico_id).single();
-            if (medicoError) throw medicoError;
-            const { data: labData, error: labError } = await supabase.from('labs').select('*').eq('id', examData.lab_id).single();
-            if (labError) throw labError;
+            const [patientRes, medicoRes, labRes] = await Promise.all([
+                supabase.from('patients').select('*').eq('id', examData.patient_id).single(),
+                supabase.from('users').select('*').eq('id', examData.medico_id).single(),
+                supabase.from('labs').select('*').eq('id', examData.lab_id).single(),
+            ]);
+            if (patientRes.error) throw patientRes.error;
+            if (medicoRes.error) throw medicoRes.error;
+            if (labRes.error) throw labRes.error;
+            const patientData = patientRes.data;
+            const medicoData = medicoRes.data;
+            const labData = labRes.data;
             setExam(examData);
             setPatient(patientData);
             setMedico(medicoData);
@@ -108,12 +113,14 @@ const ExamDetails: React.FC<ExamDetailsProps> = ({ examId, onBack, onExamUpdated
     };
     const loadAuditLogs = async (examId: string)=>{
         try {
-            const { data: logsData, error: logsError } = await supabase.from('audit_logs').select('*').eq('exam_id', examId).order('created_at', {
-                ascending: true
-            });
-            if (logsError) throw logsError;
-            const { data: usersData, error: usersError } = await supabase.from('users').select('id, nome').eq('ativo', true);
-            if (usersError) throw usersError;
+            const [logsRes, usersRes] = await Promise.all([
+                supabase.from('audit_logs').select('*').eq('exam_id', examId).order('created_at', { ascending: true }),
+                supabase.from('users').select('id, nome').eq('ativo', true),
+            ]);
+            if (logsRes.error) throw logsRes.error;
+            if (usersRes.error) throw usersRes.error;
+            const logsData = logsRes.data;
+            const usersData = usersRes.data;
             setAuditLogs(logsData || []);
             setUsers(usersData || []);
             console.log('📜 Logs de auditoria carregados:', logsData?.length);

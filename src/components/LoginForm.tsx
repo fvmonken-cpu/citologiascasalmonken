@@ -18,7 +18,7 @@ const LoginForm = ()=>{
       <Card className="w-full max-w-md shadow-lg" data-spec-id="login-card">
         <CardHeader className="text-center space-y-4" data-spec-id="login-header">
           <div className="flex justify-center mb-4" data-spec-id="login-logo-container">
-            <img src="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" alt="Espaço Casal Monken Logo" className="h-20 w-auto object-contain" data-spec-id="login-logo"/>
+            <img src="/logo-casal-monken.png" alt="Espaço Casal Monken Logo" className="h-20 w-auto object-contain" data-spec-id="login-logo"/>
           </div>
           <CardTitle className="text-2xl font-bold text-gray-800" data-spec-id="login-title">
             Citologia Oncótica

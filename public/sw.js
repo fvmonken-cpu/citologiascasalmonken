@@ -1,13 +1,5 @@
-const CACHE_NAME = 'citologia-casal-monken-v1.2.0';
-const urlsToCache = [
-  '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
-  '/manifest.json',
-  '/favicon.ico',
-  '/favicon.svg',
-  'https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png'
-];
+const CACHE_NAME = 'citologia-casal-monken-v1.4.0';
+const urlsToCache = ['/', '/favicon.svg', '/favicon.ico', '/logo-casal-monken.png'];
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
@@ -16,7 +8,11 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('📦 Service Worker: Cache aberto');
-        return cache.addAll(urlsToCache);
+        return Promise.all(
+          urlsToCache.map(u =>
+            cache.add(u).catch(e => console.warn('skip cache', u, e))
+          )
+        );
       })
       .then(() => {
         console.log('✅ Service Worker: Recursos em cache');
@@ -51,8 +47,7 @@ self.addEventListener('activate', (event) => {
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
   // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin) && 
-      !event.request.url.includes('cdn-pinspec-public.pinspec.ai')) {
+  if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
 

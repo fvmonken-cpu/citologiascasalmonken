@@ -117,7 +117,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
         <div className="px-4 sm:px-6 lg:px-8" data-spec-id="desktop-header-container">
           <div className="flex justify-between items-center h-16" data-spec-id="desktop-header-content">
             <div className="flex items-center space-x-4" data-spec-id="header-left">
-              <img src="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" alt="Espaço Casal Monken Logo" className="h-8 w-auto object-contain" data-spec-id="header-logo"/>
+              <img src="/logo-casal-monken.png" alt="Espaço Casal Monken Logo" className="h-8 w-auto object-contain" data-spec-id="header-logo"/>
               <div className="flex flex-col" data-spec-id="header-titles">
                 <h1 className="text-xl font-semibold text-gray-900" data-spec-id="app-title">
                   Citologia Oncótica
@@ -164,7 +164,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
         <div className="px-3 py-2" data-spec-id="mobile-header-container">
           <div className="flex items-center justify-between" data-spec-id="mobile-header-content">
             <div className="flex items-center space-x-2" data-spec-id="mobile-header-left">
-              <img src="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" alt="Logo" className="h-6 w-auto object-contain" data-spec-id="mobile-header-logo"/>
+              <img src="/logo-casal-monken.png" alt="Logo" className="h-6 w-auto object-contain" data-spec-id="mobile-header-logo"/>
               <div className="flex flex-col" data-spec-id="mobile-header-titles">
                 <h1 className="text-sm font-semibold text-gray-900" data-spec-id="mobile-app-title">
                   Citologia Oncótica
@@ -220,7 +220,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onNavigate })=>{
         <aside className="hidden md:block w-64 bg-white shadow-sm min-h-screen" data-spec-id="desktop-sidebar">
           <div className="p-4 border-b border-gray-200" data-spec-id="sidebar-header">
             <div className="flex flex-col items-center space-y-3" data-spec-id="sidebar-branding">
-              <img src="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" alt="Espaço Casal Monken Logo" className="h-16 w-auto object-contain" data-spec-id="sidebar-logo"/>
+              <img src="/logo-casal-monken.png" alt="Espaço Casal Monken Logo" className="h-16 w-auto object-contain" data-spec-id="sidebar-logo"/>
               <div className="text-center" data-spec-id="sidebar-titles">
                 <h2 className="text-sm font-semibold text-gray-800" data-spec-id="sidebar-clinic-name">
                   Espaço Casal Monken

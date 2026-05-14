@@ -36,24 +36,26 @@ const ExamHistory: React.FC<ExamHistoryProps> = ({ onViewExam })=>{
         console.log('📚 Carregando histórico de exames...');
         setLoading(true);
         try {
-            const { data: usersData, error: usersError } = await supabase.from('users').select('*').eq('ativo', true);
-            if (usersError) throw usersError;
-            const { data: patientsData, error: patientsError } = await supabase.from('patients').select('*');
-            if (patientsError) throw patientsError;
-            const { data: labsData, error: labsError } = await supabase.from('labs').select('*');
-            if (labsError) throw labsError;
-            let examsQuery = supabase.from('exames').select('*').eq('status', 'Próxima Consulta Comunicada ao Comercial').order('data_comercial_comunicado', {
-                ascending: false
-            });
+            let examsQuery = supabase.from('exames').select('*').eq('status', 'Próxima Consulta Comunicada ao Comercial').order('data_comercial_comunicado', { ascending: false });
             if (user?.perfil === 'Medico') {
                 examsQuery = examsQuery.eq('medico_id', user.id);
             }
-            const { data: examsData, error: examsError } = await examsQuery;
-            if (examsError) throw examsError;
+            const [usersRes, patientsRes, labsRes, examsRes] = await Promise.all([
+                supabase.from('users').select('*').eq('ativo', true),
+                supabase.from('patients').select('*'),
+                supabase.from('labs').select('*'),
+                examsQuery,
+            ]);
+            if (usersRes.error) throw usersRes.error;
+            if (patientsRes.error) throw patientsRes.error;
+            if (labsRes.error) throw labsRes.error;
+            if (examsRes.error) throw examsRes.error;
+            const usersData = usersRes.data;
+            const patientsData = patientsRes.data;
+            const labsData = labsRes.data;
+            const examsData = examsRes.data;
             const examIds = examsData?.map((exam)=>exam.id) || [];
-            const { data: auditData, error: auditError } = await supabase.from('audit_logs').select('*').in('exam_id', examIds).order('created_at', {
-                ascending: true
-            });
+            const { data: auditData, error: auditError } = await supabase.from('audit_logs').select('*').in('exam_id', examIds).order('created_at', { ascending: true });
             if (auditError) throw auditError;
             setUsers(usersData || []);
             setPatients(patientsData || []);

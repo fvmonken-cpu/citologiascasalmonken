@@ -1,13 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script>
-      const script = document.createElement('script');
-      script.src = '/specai_dev.js';
-      document.head.appendChild(script);
-    </script>
-
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,12 +18,13 @@
     
     <!-- iOS PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Citologia CM" />
-    <link rel="apple-touch-icon" href="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" />
+    <link rel="apple-touch-icon" href="/logo-casal-monken.png" />
     
     <!-- Windows PWA Meta Tags -->
-    <meta name="msapplication-TileImage" content="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" />
+    <meta name="msapplication-TileImage" content="/logo-casal-monken.png" />
     <meta name="msapplication-TileColor" content="#2563eb" />
     
     <!-- Security Meta Tags -->
@@ -39,11 +33,8 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Citologia Oncótica - Casal Monken" />
     <meta property="og:description" content="Sistema de Gestão de Exames de Citologia Oncótica" />
-    <meta property="og:image" content="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" />
+    <meta property="og:image" content="/logo-casal-monken.png" />
     <meta property="og:type" content="website" />
-    
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://cdn-pinspec-public.pinspec.ai/assets/TyEPnly8Vve4mhijRj0lR.png" as="image" />
     
     <!-- Install Service Worker -->
     <script>
@@ -64,11 +55,5 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 
-    <style>
-      specai-tag-start,
-      specai-tag-end {
-        display: none;
-      }
-    </style>
   </body>
 </html>

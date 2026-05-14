@@ -14,7 +14,7 @@ Repositório: **https://github.com/fvmonken-cpu/citologiascasalmonken** (branch 
 
 ## Resumo do trabalho até aqui
 
-Evolução do projeto em ordem cronológica (última atualização: 2026-04-23):
+Evolução do projeto em ordem cronológica (última atualização: 2026-05-13):
 
 1. **Migração de autenticação** — saída do esquema antigo baseado em `senha_hash` em `public.users` para **Supabase Auth nativo** (`signInWithPassword`). Script `scripts/migrate-users-to-auth.ts` já executado (não rodar de novo).
 2. **Row Level Security** — ativado em todas as tabelas (`patients`, `exames`, `labs`, `audit_logs`, `users`) via migration `000001`. Função `get_user_perfil()` SECURITY DEFINER criada para evitar recursão.
@@ -36,6 +36,8 @@ Evolução do projeto em ordem cronológica (última atualização: 2026-04-23):
 12. **Fixes pós-produção reportados pela Secretária** (2026-04-23) — dois bugs corrigidos enquanto o perfil Secretaria testava o sistema:
     - **RLS de `users` bloqueava Secretaria/Medico de ler o médico responsável em `ExamDetails`** (PGRST116 → "Exame não encontrado"). Migration `000009` amplia `users_select` para `auth.uid() IS NOT NULL` (qualquer autenticado pode SELECT). INSERT/UPDATE/DELETE seguem restritos.
     - **Trigger `exam_status_push` e cron SLA chamavam `net.http_post` com `body` em `text`** (erro 42883 ao avançar status). Migration `000010` corrige `body` para `jsonb` em ambos.
+13. **Remoção do Pinspec + correção de logo e performance** (2026-05-13) — Pinspec CDN saiu do ar, derrubando a logo (`cdn-pinspec-public.pinspec.ai`) e travando carregamento por: preload de imagem morta, `cache.addAll` falhando no SW, `/specai_dev.js` rodando em prod, e plugin `specai-vite-plugin` ativo no build. Substituída por asset local transparente (`public/logo-casal-monken.png`, gerada via chroma key com `sharp`). SW bumpado para `v1.3.0` com `addAll` tolerante a falhas. Removidos `specai-vite-plugin.js` e `public/specai_dev.js`.
+14. **Performance: paralelização de loaders + fix do manifest** (2026-05-13, parte 2) — corrigido `manifest.json` que ficou pra trás no plano anterior (ainda apontava para Pinspec, causando erro `Unexpected data after root element`). Loaders de `Dashboard`, `ExamHistory`, `ExamRegistration` e `ExamDetails` migraram de awaits em série para `Promise.all`, reduzindo logout→login de ~6 round-trips sequenciais para ~2. SW bumpado para `v1.4.0`.
 
 ---
 
@@ -46,7 +48,7 @@ Evolução do projeto em ordem cronológica (última atualização: 2026-04-23):
 - **Migrations aplicadas**: 10 (ver tabela abaixo). Todas em produção; `000006`, `000009` e `000010` aplicadas via SQL Editor em 2026-04-23.
 - **Outras alterações SQL sem arquivo de migration**: `audit_logs.user_id` convertido para `ON DELETE SET NULL` (2026-04-23).
 - **Edge Functions deployadas**: `create-user`, `send-push-notification`.
-- **Service Worker**: versão `citologia-casal-monken-v1.2.0` — **lembrar de incrementar** antes do próximo deploy que mexa em JS.
+- **Service Worker**: versão `citologia-casal-monken-v1.4.0` — **lembrar de incrementar** antes do próximo deploy que mexa em JS.
 - **Dependências**: React 18.3.1, Vite 5.4.10, @supabase/supabase-js 2.45.4, TypeScript 5.6.3. `react-router-dom` está instalado mas não é usado (navegação é switch/case em `Index.tsx`).
 - **Perfis ativos**: `Superusuario`, `Administrador`, `Secretaria`, `Medico` — RLS enforçando corretamente (médico vê só seus exames/pacientes).
 - **Arquivos com segredos NÃO commitados** (protegidos pelo `.gitignore`): `.env.local`, `Supabase EnsiNati.txt` (contém Stripe LIVE keys — recomendar rotação ao usuário), `migration_update_passwords.sql`.
@@ -214,3 +216,6 @@ VAPID_SUBJECT=mailto:...
 - **Hard-delete de usuário pode falhar por FK** — mesmo com `audit_logs.user_id ON DELETE SET NULL`, outras tabelas (`exames.medico_id`, `patients.medico_responsavel_id`) ainda bloqueiam. Regra: **desativar, não excluir**. O frontend já filtra o botão de excluir via `canDeleteUser()`, mas a exclusão em si pode falhar no backend.
 - **Git config no Windows**: ao `git init` em `D:\`, aparece `fatal: detected dubious ownership`. Fix: `git config --global --add safe.directory D:/project-7757-controle-citologias`.
 - **Segredos em arquivos `.txt` soltos**: o `.gitignore` protege `Supabase EnsiNati.txt` e `migration_update_passwords.sql`, mas eles continuam no disco em texto claro (risco via backup/sincronização). O arquivo `Supabase EnsiNati.txt` contém **Stripe LIVE keys** — rotação recomendada.
+- **`cache.addAll` é all-or-nothing**: se uma única URL falhar (ex.: CDN externo fora do ar), o Service Worker inteiro falha na instalação. Usar `Promise.all(urls.map(u => cache.add(u).catch(...)))` para tolerância a falhas individuais.
+- **Pinspec CDN é externo e instável**: não voltar a depender de `cdn-pinspec-public.pinspec.ai` para nenhum asset crítico. Se o ferramental de preview for re-adicionado, manter a guarda `mode === "development"` no `vite.config.ts`.
+- **Loaders com awaits em série**: padrão antigo do projeto era `await q1; await q2; await q3;` mesmo quando independentes. Em conexões com RTT alto isso compõe (~200-300ms × N). Default novo: `Promise.all([q1, q2, q3])`. Aplicado em 2026-05-13 nos quatro loaders principais.
